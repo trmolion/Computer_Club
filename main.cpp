@@ -52,29 +52,45 @@ int main (int argc, char* argv[]){
             int j = 0;
             while (getline(regist, token, ' ')){
                 if (j == 0){
-                    if(time.ReadTime(token)) flag = 4;
-                    if (time.ComparisonTime(CloseClub)) flag = 2;
+                    if(time.ReadTime(token)){
+                       flag = 4;
+                       break; 
+                    } 
+                    if (time.ComparisonTime(CloseClub)){
+                        flag = 2;
+                        break;
+                    } 
                     if (i == 3) pasttime = time;
-                    else if (!time.ComparisonTime(pasttime)) flag = 1;
+                    else if (!time.ComparisonTime(pasttime)){
+                        flag = 1;
+                        break;
+                    } 
                     else pasttime = time;
                 }
-                if (j == 1) if(!(code = atoi(token.c_str()))) flag = 5;
+                if (j == 1) if(!(code = atoi(token.c_str()))){
+                   flag = 5; 
+                   break;
+                } 
                 if (j == 2) object = token;
                 if (j == 3){
                     numberT = atoi(token.c_str());
-                    if ((numberT > QuantityTables) || (numberT <= 0)) flag = 3;
+                    if ((numberT > QuantityTables) || (numberT <= 0)){
+                        flag = 3;
+                        break;
+                    }
                 }
                 j++;
             }
             if(flag){
                 CheckFlag(flag, buffer);
-                break;
+                input.close();
+                return 0;
             } 
             else tess.IncomingEvents(time, code, object, numberT - 1);
         }
         i++;
     }
-    if (input.get() == -1) tess.CloseClub();
+    if (input.get() == EOF) tess.CloseClub();
     input.close();
     return 0;
 }
